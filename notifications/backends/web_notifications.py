@@ -1,13 +1,16 @@
 from redis_cache import get_redis_connection
 from time import time
 from operator import itemgetter
+from hashlib import sha1
 import json
 
 def get_user_key(user):
-    return '%s:%s' % ('unread_notifications', user.id)
+    key = '%s:%s' % ('unread_notifications', user.id)
+    return sha1(key).hexdigest()
 
 def get_notification_key(user, obj):
-    return '%s:%s' % (obj.__class__, obj.id)
+    key = '%s:%s' % (obj.__class__, obj.id)
+    return sha1(key).hexdigest()
 
 def add_notification(user, obj, message, url):
     r = get_redis_connection() 
