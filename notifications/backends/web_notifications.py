@@ -35,6 +35,13 @@ def get_notifications(user):
     notifications.sort(key=itemgetter('timestamp'))
     return notifications
 
+def get_notification(user, notification_id):
+    r = get_redis_connection() 
+    user_key = get_user_key(user)
+    notification = r.hget(user_key, notification_id)
+    if notification:
+        return json.loads(notification)
+
 def remove_notification(user, notification_id):
     r = get_redis_connection() 
     user_key = get_user_key(user)
