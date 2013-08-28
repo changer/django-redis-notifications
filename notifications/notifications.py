@@ -1,8 +1,10 @@
 from redis_cache import get_redis_connection
 from django.contrib.auth import get_user_model
+from hashlib import sha1
 
 def get_key(obj):
-    return "%s:%s" % (str(type(obj)), obj.pk)
+    key = "%s:%s" % (str(type(obj)), obj.pk)
+    return sha1(key).hexdigest()
 
 def add_follower(obj, user):
     r = get_redis_connection()
